@@ -7,15 +7,15 @@ Constants:
     API_URL: str - URL to get data from proxies.
 
     PROXIES_DATA_REGEX: re.Pattern - Regex compiled to get from proxies
-                                        Data:
-                                            # IP
-                                            # Separator
-                                            # Port
-                                            # Separator (space)
-                                            # Proxy information
-                                            #     Anonymity [N|A|H]
-                                            #     Type [ |S|!]
-                                            #     Google passed [-|+]
+        Data:
+            ├─ IP
+            ├─ Separator
+            ├─ Port
+            ├─ Separator (space)
+            └─ Proxy information
+                ├─ Anonymity [N|A|H]
+                ├─ Type [ |S|!]
+                └─ Google passed [-|+]
 
 """
 
@@ -29,7 +29,7 @@ PROXIES_DATA_REGEX: re.Pattern = re.compile(r'''
     (\d{0,5})                          # Port
     \s                                 # Separator (space)
     ([A-Z\- \-\+!]+)                   # Proxy information
-                                       #   - Anonymity [N|A|H]
-                                       #   - Type [ |S|!]
-                                       #   - Google passed [-|+]
+                                       #   ├─ Anonymity [N|A|H]
+                                       #   ├─ Type [ |S|!]
+                                       #   └─ Google passed [-|+]
 ''', re.VERBOSE)

@@ -6,7 +6,7 @@ Constants:
 
     API_URL: str - URL to get data from proxies.
 
-    PROXIES_DATA_REGEX: re.compile - Regex compiled to get from proxies
+    PROXIES_DATA_REGEX: re.Pattern - Regex compiled to get from proxies
                                         Data:
                                             # IP
                                             # Separator
@@ -19,11 +19,11 @@ Constants:
 
 """
 
-from re import compile, VERBOSE
+import re
 
 API_URL: str = "https://raw.githubusercontent.com/clarketm/proxy-list/master/proxy-list.txt"
 
-PROXIES_DATA_REGEX = compile(r'''
+PROXIES_DATA_REGEX: re.Pattern = re.compile(r'''
     (\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3})  # IP
     :                                  # Separator
     (\d{0,5})                          # Port
@@ -32,4 +32,4 @@ PROXIES_DATA_REGEX = compile(r'''
                                        #   - Anonymity [N|A|H]
                                        #   - Type [ |S|!]
                                        #   - Google passed [-|+]
-''', VERBOSE)
+''', re.VERBOSE)

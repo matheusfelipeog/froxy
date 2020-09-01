@@ -1,14 +1,18 @@
 # -*- coding: utf-8 -*-
 
-# Standard libraries
+# --- Standard libraries ----
 import sys
 import re
 
-# Third-party libraries
+# --- Third-party libraries ---
 import requests
 
-# Local libraries
-from ._const import API_URL, PROXIES_DATA_REGEX
+# --- Local libraries ---
+from ._const import API_URL
+
+from ._const import PROXIES_DATA_REGEX
+
+from ._const import HTTP_FLAGS, HTTPS_FLAGS
 
 
 class Froxy(object):
@@ -38,14 +42,15 @@ class Froxy(object):
             [
                 d[0],  # IP
                 d[1],  # Port
-                self._split_proxy_info(
+                Froxy._split_proxy_info(
                     d[2].strip(' ')  # Proxy Info
                 )  
             ]
             for d in data
         ]
 
-    def _split_proxy_info(self, data: str) -> list:
+    @staticmethod
+    def _split_proxy_info(data: str) -> list:
         
         country = data[:2]
         anonymity = data[3:4]
@@ -60,10 +65,44 @@ class Froxy(object):
 
         self._proxy_storage = self._data_normalization(data_raw)
 
+    def _base_proxies_filter(self, filters: list) -> list:
+        
+        return list(
+            filter(
+                lambda proxies: proxies[2][2] in filters,
+                self._proxy_storage
+            )
+        )
+
+    def http(self) -> list:
+        return self._base_proxies_filter(HTTP_FLAGS)
+
+    def https(self) -> list:
+        return self._base_proxies_filter(HTTPS_FLAGS)
+
+    def get(
+            self,
+            country: str=None,
+            anonymity: str=None,
+            protocol: str=None,
+            google_passed: str=None
+        ) -> list:
+        
+        # if don't have a filter flag, return all proxies.
+        if not any([country, anonymity, protocol, google_passed]):
+            return self._proxy_storage
+
+        proxies = []  # Storage of filtered proxies
+
+        # -- Protocol Flag --
+        if protocol == 'http':
+            proxies.extend(self.http())
+        elif protocol == 'https':
+            proxies.extend(self.https())
+        
+        return proxies
+
     def start(self):
         self._set_proxies_in_storage()
 
         return self
-
-    def proxy_list(self) -> list:
-        return self._proxy_storage

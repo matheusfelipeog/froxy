@@ -1,4 +1,4 @@
-# -*- coding:utf-8 -*-
+# -*- coding: utf-8 -*-
 
 # Standard libraries
 import sys
@@ -15,11 +15,11 @@ class Froxy(object):
     
     def __init__(self):
 
-        self._proxy_list: list = []
+        self._proxy_storage: list = []
 
         self.number_of_proxies: int = 0
 
-    def _get_all_proxies_data(self, url: str) -> str:
+    def _get_data_in_api(self, url: str) -> list:
 
         try:
             resp = requests.request('GET', url, timeout=10)
@@ -34,7 +34,7 @@ class Froxy(object):
 
         return PROXIES_DATA_REGEX.findall(str(data))
 
-    def _normalize(self, data: list) -> list:
+    def _data_normalization(self, data: list) -> list:
         
         return [ 
             tuple(
@@ -43,17 +43,17 @@ class Froxy(object):
             for d in data
         ]
 
-    def _set_proxies_in_list(self) -> None:
+    def _set_proxies_in_storage(self) -> None:
 
-        data_raw = self._get_all_proxies_data(API_URL)
+        data_raw = self._get_data_in_api(API_URL)
 
-        self._proxy_list = self._normalize(data_raw)
+        self._proxy_storage = self._data_normalization(data_raw)
         self.number_of_proxies = len(data_raw)
 
     def start(self):
-        self._set_proxies_in_list()
+        self._set_proxies_in_storage()
 
         return self
 
     def proxy_list(self) -> list:
-        return self._proxy_list
+        return self._proxy_storage

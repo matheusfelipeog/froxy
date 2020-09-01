@@ -33,3 +33,7 @@ PROXIES_DATA_REGEX: re.Pattern = re.compile(r'''
                                        #   ├─ Type [ |S|!]
                                        #   └─ Google passed [-|+]
 ''', re.VERBOSE)
+
+HTTP_FLAGS: list = ['', '!']
+
+HTTPS_FLAGS: list = ['S', 'S!']

@@ -8,7 +8,7 @@ import re
 import requests
 
 # Local libraries
-from .const import API_URL, PROXIES_DATA_REGEX
+from ._const import API_URL, PROXIES_DATA_REGEX
 
 
 class Froxy(object):

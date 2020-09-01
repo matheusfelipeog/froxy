@@ -1,3 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from .model import Froxy as Froxy
+__all__ = ['Froxy']
+
+from ._froxy import Froxy as Froxy

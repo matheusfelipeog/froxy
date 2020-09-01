@@ -35,13 +35,16 @@ class Froxy(object):
         return PROXIES_DATA_REGEX.findall(str(data))
 
     def _data_normalization(self, data: list) -> list:
-        
+
         return [ 
             tuple(
                 map(str.strip, d)
             )
             for d in data
         ]
+
+    def _split_proxy_info(self):
+        ...
 
     def _set_proxies_in_storage(self) -> None:
 

@@ -37,14 +37,24 @@ class Froxy(object):
     def _data_normalization(self, data: list) -> list:
 
         return [ 
-            tuple(
-                map(str.strip, d)
-            )
+            [
+                d[0],  # IP
+                d[1],  # Port
+                self._split_proxy_info(
+                    d[2].strip(' ')  # Proxy Info
+                )  
+            ]
             for d in data
         ]
 
-    def _split_proxy_info(self):
-        ...
+    def _split_proxy_info(self, data: str) -> list:
+        
+        country = data[:2]
+        anonymity = data[3:4]
+        type_ = data[4:].strip('-+ ')  # Remove splitting (- and space) and google_passed flag (+)
+        google_passed = data[-1]
+
+        return [country, anonymity, type_, google_passed]
 
     def _set_proxies_in_storage(self) -> None:
 

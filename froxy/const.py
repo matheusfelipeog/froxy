@@ -4,9 +4,9 @@ This module maintains some constants for using the Froxy module.
 
 Constants:
 
-    API_URL: str - URL to get data from proxies.
+    API_URL: str - URL to get data from proxies;
 
-    PROXIES_DATA_REGEX: re.Pattern - Regex compiled to get from proxies
+    PROXIES_DATA_REGEX: re.Pattern - Regex compiled to get from proxies.
         Data:
             ├─ IP
             ├─ Separator

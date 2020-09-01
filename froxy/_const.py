@@ -6,7 +6,7 @@ Constants:
 
     API_URL: str - URL to get data from proxies;
 
-    PROXIES_DATA_REGEX: re.Pattern - Regex compiled to get from proxies.
+    PROXIES_DATA_REGEX: re.Pattern - Regex compiled to get from proxies;
         Data:
             ├─ IP
             ├─ Separator
@@ -16,6 +16,10 @@ Constants:
                 ├─ Anonymity [N|A|H]
                 ├─ Type [ |S|!]
                 └─ Google passed [-|+]
+    
+    HTTP_FLAGS: list - Flags for http protocol;
+
+    HTTPS_FLAGS: list - Flags for https protocol.
 
 """
 
@@ -34,6 +38,6 @@ PROXIES_DATA_REGEX: re.Pattern = re.compile(r'''
                                        #   └─ Google passed [-|+]
 ''', re.VERBOSE)
 
+# Protocol Flag
 HTTP_FLAGS: list = ['', '!']
-
 HTTPS_FLAGS: list = ['S', 'S!']

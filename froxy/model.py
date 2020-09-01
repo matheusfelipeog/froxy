@@ -17,8 +17,6 @@ class Froxy(object):
 
         self._proxy_storage: list = []
 
-        self.number_of_proxies: int = 0
-
     def _get_data_in_api(self, url: str) -> list:
 
         try:
@@ -61,7 +59,6 @@ class Froxy(object):
         data_raw = self._get_data_in_api(API_URL)
 
         self._proxy_storage = self._data_normalization(data_raw)
-        self.number_of_proxies = len(data_raw)
 
     def start(self):
         self._set_proxies_in_storage()

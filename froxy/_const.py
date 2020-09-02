@@ -17,13 +17,41 @@ Constants:
                 ├─ Type [ |S|!]
                 └─ Google passed [-|+]
     
+
+    ------------------ FLAGS ------------------
+
+    COUNTRY_CODE_FLAGS: list -  Country Code - ISO 3166-1 alpha-2;
+        └─ More info in: https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2
+
+    ANONYMITY_FLAGS: list - Proxy Anonymity is splitting in three flags (N, A, H);
+        └─ Flags:
+            ├─ N - No anonymity
+            ├─ A - Anonymity
+            └─ H - High anonymity
+
     HTTP_FLAGS: list - Flags for http protocol;
 
     HTTPS_FLAGS: list - Flags for https protocol.
 
+    GOOGLE_PASSED_FLAGS: list - Google proxy.
+        ├─  A Google proxy (also known as the google-passed proxy)
+        │   is an HTTP proxy which has the following two features:
+        │      ├─ 1. It must support searching on Google and a Google
+        │      │     proxy should support HTTPS/SSL;
+        │      └─ 2. Google must not block it.
+        │
+        ├─ Flags:
+        │   ├─ (+) - Yes
+        │   └─ (-) - No
+        │
+        └─ More info in: https://free-proxy-list.net/blog/google-proxies-dead
+
+
+For more info about Flags, see: https://github.com/clarketm/proxy-list
 """
 
 import re
+from string import ascii_uppercase
 
 API_URL: str = "https://raw.githubusercontent.com/clarketm/proxy-list/master/proxy-list.txt"
 
@@ -38,6 +66,13 @@ PROXIES_DATA_REGEX: re.Pattern = re.compile(r'''
                                        #   └─ Google passed [-|+]
 ''', re.VERBOSE)
 
+# Country Code - ISO 3166-1 alpha-2 <https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2>
+COUNTRY_CODE_FLAGS: list = [f'{a}{a2}' for a in ascii_uppercase for a2 in ascii_uppercase]
+
+ANONYMITY_FLAGS: list = ['N', 'A', 'H']
+
 # Protocol Flag
 HTTP_FLAGS: list = ['', '!']
 HTTPS_FLAGS: list = ['S', 'S!']
+
+GOOGLE_PASSED_FLAGS: list = ['-', '+']

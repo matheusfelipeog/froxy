@@ -14,6 +14,7 @@ from ._const import PROXIES_DATA_REGEX
 
 from ._const import HTTP_FLAGS, HTTPS_FLAGS
 from ._const import COUNTRY_CODE_FLAGS
+from ._const import ANONYMITY_FLAGS
 
 
 class Froxy(object):
@@ -74,6 +75,11 @@ class Froxy(object):
             data_filtered.extend(
                 Froxy._filter_model(self._proxy_storage, line=2, col=0, filters=filters)
             )
+        
+        elif category == 'anonymity':
+            data_filtered.extend(
+                Froxy._filter_model(self._proxy_storage, line=2, col=1, filters=filters)
+            )
 
         elif category == 'protocol':
             data_filtered.extend(
@@ -89,7 +95,7 @@ class Froxy(object):
             data
         )
 
-    def country(self, *flags: str) -> list:
+    def country(self, *flags: tuple) -> list:
 
         # Normalize to uppercase
         flags = [f.upper() for f in flags]
@@ -105,11 +111,29 @@ class Froxy(object):
 
         return self._base_proxies_filter(category='country', filters=flags)
 
+    def anonymity(self, *flags: tuple) -> list:
+        # Normalize to uppercase
+        flags = [f.upper() for f in flags]
+
+        # Delete invalid flags
+        for idx, flag in enumerate(flags):
+            if flag not in ANONYMITY_FLAGS:
+                del flags[idx]
+
+        # If there are no flags, returns an empty list to not perform a linear search
+        if not flags:
+            return []
+        
+        return self._base_proxies_filter(category='anonymity', filters=flags)
+
     def http(self) -> list:
         return self._base_proxies_filter(category='protocol', filters=HTTP_FLAGS)
 
     def https(self) -> list:
         return self._base_proxies_filter(category='protocol', filters=HTTPS_FLAGS)
+
+    def google(self):
+        ...
 
     def get(
             self,

@@ -13,6 +13,7 @@ from ._const import API_URL
 from ._const import PROXIES_DATA_REGEX
 
 from ._const import HTTP_FLAGS, HTTPS_FLAGS
+from ._const import COUNTRY_CODE_FLAGS
 
 
 class Froxy(object):
@@ -29,7 +30,7 @@ class Froxy(object):
 
             return self._data_filter(resp.text)
 
-        except (requests.ConnectionError, requests.ConnectTimeout, requests.HTTPError) as err:
+        except (requests.ConnectionError, requests.ConnectTimeout, requests.HTTPError, requests.ReadTimeout) as err:
             sys.exit(err)
             
     def _data_filter(self, data: str) -> list:
@@ -65,20 +66,50 @@ class Froxy(object):
 
         self._proxy_storage = self._data_normalization(data_raw)
 
-    def _base_proxies_filter(self, filters: list) -> list:
+    def _base_proxies_filter(self, category: str, filters: list) -> list:
         
-        return list(
-            filter(
-                lambda proxies: proxies[2][2] in filters,
-                self._proxy_storage
+        data_filtered = []
+        
+        if category == 'country':
+            data_filtered.extend(
+                Froxy._filter_model(self._proxy_storage, line=2, col=0, filters=filters)
             )
+
+        elif category == 'protocol':
+            data_filtered.extend(
+                Froxy._filter_model(self._proxy_storage, line=2, col=2, filters=filters)
+            )
+
+        return data_filtered
+
+    @staticmethod
+    def _filter_model(data: list, line: int, col: int, filters: list):
+        return filter(
+            lambda proxies: proxies[line][col] in filters,
+            data
         )
 
+    def country(self, *flags: str) -> list:
+
+        # Normalize to uppercase
+        flags = [f.upper() for f in flags]
+
+        # Delete invalid flags
+        for idx, flag in enumerate(flags):
+            if flag not in COUNTRY_CODE_FLAGS:
+                del flags[idx]
+
+        # If there are no flags, returns an empty list to not perform a linear search
+        if not flags:
+            return []
+
+        return self._base_proxies_filter(category='country', filters=flags)
+
     def http(self) -> list:
-        return self._base_proxies_filter(HTTP_FLAGS)
+        return self._base_proxies_filter(category='protocol', filters=HTTP_FLAGS)
 
     def https(self) -> list:
-        return self._base_proxies_filter(HTTPS_FLAGS)
+        return self._base_proxies_filter(category='protocol', filters=HTTPS_FLAGS)
 
     def get(
             self,

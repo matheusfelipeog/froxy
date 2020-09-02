@@ -15,6 +15,7 @@ from ._const import PROXIES_DATA_REGEX
 from ._const import HTTP_FLAGS, HTTPS_FLAGS
 from ._const import COUNTRY_CODE_FLAGS
 from ._const import ANONYMITY_FLAGS
+from ._const import GOOGLE_PASSED_FLAGS
 
 
 class Froxy(object):
@@ -85,6 +86,11 @@ class Froxy(object):
             data_filtered.extend(
                 Froxy._filter_model(self._proxy_storage, line=2, col=2, filters=filters)
             )
+        
+        elif category == 'google_passed':
+            data_filtered.extend(
+                Froxy._filter_model(self._proxy_storage, line=2, col=3, filters=filters)
+            )
 
         return data_filtered
 
@@ -132,8 +138,20 @@ class Froxy(object):
     def https(self) -> list:
         return self._base_proxies_filter(category='protocol', filters=HTTPS_FLAGS)
 
-    def google(self):
-        ...
+    def google(self, *flags: tuple) -> list:
+
+        flags = list(flags)
+
+        # Delete invalid flags
+        for idx, flag in enumerate(flags):
+            if flag not in GOOGLE_PASSED_FLAGS:
+                del flags[idx]
+
+        # If there are no flags, returns an empty list to not perform a linear search
+        if not flags:
+            return []
+        
+        return self._base_proxies_filter(category='google_passed', filters=flags)
 
     def get(
             self,

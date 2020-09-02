@@ -94,11 +94,24 @@ class Froxy(object):
 
         proxies = []  # Storage of filtered proxies
 
-        # -- Protocol Flag --
-        if protocol == 'http':
-            proxies.extend(self.http())
-        elif protocol == 'https':
-            proxies.extend(self.https())
+        # Normalize
+        if country and isinstance(country, str):
+            country = country.upper()
+
+        if anonymity and isinstance(anonymity, str):
+            anonymity = anonymity.upper()
+        
+        if protocol and isinstance(protocol, str):
+            protocol = protocol.lower()
+
+            # -- Protocol Flag --
+            if protocol == 'http':
+                proxies.extend(self.http())
+            elif protocol == 'https':
+                proxies.extend(self.https())
+        
+        if google_passed and isinstance(google_passed, str):
+            google_passed = google_passed.upper()
         
         return proxies
 

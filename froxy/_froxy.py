@@ -138,25 +138,18 @@ class Froxy(object):
     def https(self) -> list:
         return self._base_proxies_filter(category='protocol', filters=HTTPS_FLAGS)
 
-    def google(self, *flags: tuple) -> list:
+    def google(self, flag: str) -> list:
 
-        flags = list(flags)
-
-        # Delete invalid flags
-        for idx, flag in enumerate(flags):
-            if flag not in GOOGLE_PASSED_FLAGS:
-                del flags[idx]
-
-        # If there are no flags, returns an empty list to not perform a linear search
-        if not flags:
+        # Validation
+        if flag not in GOOGLE_PASSED_FLAGS:
             return []
         
-        return self._base_proxies_filter(category='google_passed', filters=flags)
+        return self._base_proxies_filter(category='google_passed', filters=[flag])
 
     def get(
             self,
-            country: str=None,
-            anonymity: str=None,
+            country: list=None,
+            anonymity: list=None,
             protocol: str=None,
             google_passed: str=None
         ) -> list:
@@ -167,13 +160,13 @@ class Froxy(object):
 
         proxies = []  # Storage of filtered proxies
 
-        # Normalize
-        if country and isinstance(country, str):
-            country = country.upper()
+        # Verify
+        if country and isinstance(country, list):
+            proxies.extend(self.country(*country))
 
-        if anonymity and isinstance(anonymity, str):
-            anonymity = anonymity.upper()
-        
+        if anonymity and isinstance(anonymity, list):
+            proxies.extend(self.anonymity(*anonymity))
+
         if protocol and isinstance(protocol, str):
             protocol = protocol.lower()
 
@@ -184,8 +177,8 @@ class Froxy(object):
                 proxies.extend(self.https())
         
         if google_passed and isinstance(google_passed, str):
-            google_passed = google_passed.upper()
-        
+            proxies.extend(self.google(flag=google_passed))
+
         return proxies
 
     def start(self):

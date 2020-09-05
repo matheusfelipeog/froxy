@@ -160,7 +160,7 @@ class Froxy(object):
 
         proxies = []  # Storage of filtered proxies
 
-        # Verify
+        # Verify options
         if country and isinstance(country, list):
             proxies.extend(self.country(*country))
 
@@ -170,7 +170,7 @@ class Froxy(object):
         if protocol and isinstance(protocol, str):
             protocol = protocol.lower()
 
-            # -- Protocol Flag --
+            # -- Check Protocol Flag --
             if protocol == 'http':
                 proxies.extend(self.http())
             elif protocol == 'https':

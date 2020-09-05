@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+"""Froxy is a module for getting and filtering proxies."""
 
 __all__ = ['Froxy']
 

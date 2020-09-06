@@ -24,6 +24,9 @@ class Froxy(object):
 
         self._proxy_storage: list = []
 
+        # Start for get data in API and set in storage
+        self._set_proxies_in_storage()
+
     def _get_data_in_api(self, url: str) -> list:
 
         try:
@@ -180,8 +183,3 @@ class Froxy(object):
             proxies.extend(self.google(flag=google_passed))
 
         return proxies
-
-    def start(self):
-        self._set_proxies_in_storage()
-
-        return self

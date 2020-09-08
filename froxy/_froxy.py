@@ -334,7 +334,40 @@ class Froxy(object):
             protocol: str=None,
             google_passed: str=None
         ) -> list:
+        """Use multiple proxy filters or get all proxies if the filter arguments are empty.
+
+        Keyword arguments:
+
+        `country: list` - List of flags of selected countries.
+            - More info at: https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2
+
+        `anonymity: list` - List of flags of selected anonymity level. (N, A or H).
+
+        `protocol: str` - Selected protocol (http or https).
+
+        `google_passed: str` - Filter flags of google passed. (- or +).
         
+        Usage:
+        ```
+        >>> from froxy import Froxy
+        >>> froxy = Froxy()
+        >>> froxy.get(
+            country=['US', 'BR', 'RS'],
+            anonymity=['A', 'H'],
+            protocol='https',
+            google_passed='+'
+        )
+        # Example output
+        [
+            ['255.255.255.255', '3000', ['US', 'H', 'S!', '+'], 
+            ['255.255.255.254', '3000', ['US', 'A', 'S', '-'], 
+            ['254.254.254.253', '8058', ['BR', 'A', 'S', '+'],
+            ['254.254.254.252', '4058', ['RS', 'H', 'S!', '-']
+            ...
+        ]
+        ```
+        """
+
         # if don't have a filter flag, return all proxies.
         if not any([country, anonymity, protocol, google_passed]):
             return self._proxy_storage

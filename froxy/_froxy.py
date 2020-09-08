@@ -34,6 +34,10 @@ from ._const import GOOGLE_PASSED_FLAGS
 
 
 class Froxy(object):
+    """A class for manipulating and filtering proxies.
+    
+    Location of API used: https://github.com/clarketm/proxy-list
+    """
     
     def __init__(self):
 

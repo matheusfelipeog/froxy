@@ -116,15 +116,22 @@ class Froxy(object):
 
         self._proxy_storage = self._data_normalization(data_raw)
 
-    def _base_proxies_filter(self, category: str, filters: list) -> list:
+    def _base_proxies_filter(self, n: int, category: str, filters: list) -> list:
         """Filter proxies by category and flags.
 
         Keyword arguments:
+
+        `n: int` - Number of proxies selected.
 
         `category: str` - Proxy category [country, anonymity, protocol and google_passed].
 
         `filters: list` - Flags of filters.
         """
+
+        # checking that the number of proxies is invalid.
+        # If invalid, returns an empty list to avoid unnecessary processing.
+        if n < 1:
+            return []
 
         data_filtered = []
         
@@ -148,7 +155,7 @@ class Froxy(object):
                 Froxy._filter_model(self._proxy_storage, line=2, col=3, filters=filters)
             )
 
-        return data_filtered
+        return data_filtered[:n]
 
     @staticmethod
     def _filter_model(data: list, line: int, col: int, filters: list):
@@ -170,12 +177,14 @@ class Froxy(object):
             data
         )
 
-    def country(self, *flags: tuple) -> list:
+    def country(self, n: int, *flags: tuple) -> list:
         """Filter proxies for country.
 
         Use the country code to filter proxies.
 
         Keyword arguments:
+        
+        `n: int` - Number of proxies selected.
 
         `flags: tuple` - Filter flags of selected countries.
 
@@ -213,12 +222,14 @@ class Froxy(object):
         if not flags:
             return []
 
-        return self._base_proxies_filter(category='country', filters=flags)
+        return self._base_proxies_filter(n, category='country', filters=flags)
 
-    def anonymity(self, *flags: tuple) -> list:
+    def anonymity(self, n: int, *flags: tuple) -> list:
         """Filter proxies by anonymity level.
 
         Keyword arguments:
+
+        `n: int` - Number of proxies selected.
 
         `flags: tuple` - Filter flags of selected anonymity level.
 
@@ -254,10 +265,14 @@ class Froxy(object):
         if not flags:
             return []
         
-        return self._base_proxies_filter(category='anonymity', filters=flags)
+        return self._base_proxies_filter(n, category='anonymity', filters=flags)
 
-    def http(self) -> list:
+    def http(self, n: int) -> list:
         """Filter proxies by http protocol.
+
+        Keyword arguments:
+
+        `n: int` - Number of proxies selected.
 
         Usage:
         ```
@@ -273,10 +288,14 @@ class Froxy(object):
         ```
         """
 
-        return self._base_proxies_filter(category='protocol', filters=HTTP_FLAGS)
+        return self._base_proxies_filter(n, category='protocol', filters=HTTP_FLAGS)
 
-    def https(self) -> list:
+    def https(self, n: int) -> list:
         """Filter proxies by https protocol.
+
+        Keyword arguments:
+
+        `n: int` - Number of proxies selected.
 
         Usage:
         ```
@@ -292,12 +311,14 @@ class Froxy(object):
         ```
         """
 
-        return self._base_proxies_filter(category='protocol', filters=HTTPS_FLAGS)
+        return self._base_proxies_filter(n, category='protocol', filters=HTTPS_FLAGS)
 
-    def google(self, flag: str) -> list:
+    def google(self, n: int, flag: str) -> list:
         """Filter proxies by google passed.
 
         Keyword arguments:
+
+        `n: int` - Number of proxies selected.
 
         `flags: tuple` - Filter flags of google passed.
             - (+) = Yes
@@ -329,10 +350,11 @@ class Froxy(object):
         if flag not in GOOGLE_PASSED_FLAGS:
             return []
         
-        return self._base_proxies_filter(category='google_passed', filters=[flag])
+        return self._base_proxies_filter(n, category='google_passed', filters=[flag])
 
     def get(
             self,
+            n: int, 
             country: list=None,
             anonymity: list=None,
             protocol: str=None,
@@ -341,6 +363,8 @@ class Froxy(object):
         """Use multiple proxy filters or get all proxies if the filter arguments are empty.
 
         Keyword arguments:
+
+        `n: int` - Number of proxies selected. This is applied to all filters individually.
 
         `country: list` - List of flags of selected countries.
             - More info at: https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2
@@ -374,27 +398,27 @@ class Froxy(object):
 
         # if don't have a filter flag, return all proxies.
         if not any([country, anonymity, protocol, google_passed]):
-            return self._proxy_storage
+            return self._proxy_storage[:n]
 
         proxies = []  # Storage of filtered proxies
 
         # Verify options
         if country and isinstance(country, list):
-            proxies.extend(self.country(*country))
+            proxies.extend(self.country(n, *country))
 
         if anonymity and isinstance(anonymity, list):
-            proxies.extend(self.anonymity(*anonymity))
+            proxies.extend(self.anonymity(n, *anonymity))
 
         if protocol and isinstance(protocol, str):
             protocol = protocol.lower()
 
             # -- Check Protocol Flag --
             if protocol == 'http':
-                proxies.extend(self.http())
+                proxies.extend(self.http(n))
             elif protocol == 'https':
-                proxies.extend(self.https())
+                proxies.extend(self.https(n))
         
         if google_passed and isinstance(google_passed, str):
-            proxies.extend(self.google(flag=google_passed))
+            proxies.extend(self.google(n, flag=google_passed))
 
         return proxies

@@ -18,6 +18,7 @@ Usage:
 # --- Standard libraries ----
 import sys
 import re
+import random
 
 # --- Third-party libraries ---
 import requests
@@ -170,13 +171,37 @@ class Froxy(object):
             data
         )
 
+    @staticmethod
+    def _filter_n_proxies(n: int, flags: list, func_filter) -> list:
+        """Filter N proxies for reuse in `get(...)`.
+        
+        Keyword arguments:
+
+        `n: int` - Number of proxies.
+
+        `flags: list` - List of flags for filter.
+        
+        `func_filter: function` - Filter function used.
+        """
+
+        proxies = []
+        for flag in flags:
+            data = func_filter(flag)
+            data_length = len(data)
+            
+            proxies.extend(
+                random.sample(data, n if n < data_length else data_length)
+            )
+        
+        return proxies
+
     def country(self, *flags: tuple) -> list:
         """Filter proxies for country.
 
         Use the country code to filter proxies.
 
         Keyword arguments:
-
+        
         `flags: tuple` - Filter flags of selected countries.
 
         Code example:
@@ -256,7 +281,7 @@ class Froxy(object):
         
         return self._base_proxies_filter(category='anonymity', filters=flags)
 
-    def http(self) -> list:
+    def http(self, *args, **kwargs) -> list:
         """Filter proxies by http protocol.
 
         Usage:
@@ -275,7 +300,7 @@ class Froxy(object):
 
         return self._base_proxies_filter(category='protocol', filters=HTTP_FLAGS)
 
-    def https(self) -> list:
+    def https(self, *args, **kwargs) -> list:
         """Filter proxies by https protocol.
 
         Usage:
@@ -294,7 +319,7 @@ class Froxy(object):
 
         return self._base_proxies_filter(category='protocol', filters=HTTPS_FLAGS)
 
-    def google(self, flag: str) -> list:
+    def google(self, flag: str, *args, **kwargs) -> list:
         """Filter proxies by google passed.
 
         Keyword arguments:
@@ -333,41 +358,43 @@ class Froxy(object):
 
     def get(
             self,
-            country: list=None,
-            anonymity: list=None,
-            protocol: str=None,
-            google_passed: str=None
+            country: list=[],
+            anonymity: list=[],
+            protocol: list=[],
+            google_passed: list=[]
         ) -> list:
         """Use multiple proxy filters or get all proxies if the filter arguments are empty.
 
         Keyword arguments:
 
-        `country: list` - List of flags of selected countries.
+        `country: list` - Number and List of flags of selected countries.
             - More info at: https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2
 
-        `anonymity: list` - List of flags of selected anonymity level. (N, A or H).
+        `anonymity: list` - Number and List of flags of selected anonymity level. (N, A or H).
 
-        `protocol: str` - Selected protocol (http or https).
+        `protocol: list` - Number and Selected protocol (http or https).
 
-        `google_passed: str` - Filter flags of google passed. (- or +).
+        `google_passed: list` - Number and Filter flags of google passed. (- or +).
         
         Usage:
         ```
         >>> from froxy import Froxy
         >>> froxy = Froxy()
         >>> froxy.get(
-            country=['US', 'BR', 'RS'],
-            anonymity=['A', 'H'],
-            protocol='https',
-            google_passed='+'
-        )
+                country=[1, 'US', 'BR'],
+                anonymity=[2, 'H'],
+                protocol=[2, 'https'],
+                google_passed=[1, '+']
+            )
         # Example output
         [
             ['255.255.255.255', '3000', ['US', 'H', 'S!', '+'], 
-            ['255.255.255.254', '3000', ['US', 'A', 'S', '-'], 
-            ['254.254.254.253', '8058', ['BR', 'A', 'S', '+'],
-            ['254.254.254.252', '4058', ['RS', 'H', 'S!', '-']
-            ...
+            ['254.254.254.254', '8058', ['BR', 'A', 'S', '+'],
+            ['254.254.254.253', '6000', ['TT', 'H', '', '-'],
+            ['254.254.254.252', '4058', ['BR', 'H', '!', '-'],
+            ['255.255.255.251', '3000', ['RS', 'H', 'S', '-'], 
+            ['254.254.254.250', '7058', ['ZZ', 'H', 'S!', '-'],
+            ['254.254.254.250', '7058', ['YY', 'N', '', '+']
         ]
         ```
         """
@@ -378,23 +405,65 @@ class Froxy(object):
 
         proxies = []  # Storage of filtered proxies
 
-        # Verify options
-        if country and isinstance(country, list):
-            proxies.extend(self.country(*country))
 
-        if anonymity and isinstance(anonymity, list):
-            proxies.extend(self.anonymity(*anonymity))
+        # --- FILTER COUNTRY ---
+        if country and isinstance(country, list) and country[0] > 0:
 
-        if protocol and isinstance(protocol, str):
-            protocol = protocol.lower()
+            filtred = Froxy._filter_n_proxies(
+                        n=country[0], 
+                        flags=country[1:], 
+                        func_filter=self.country
+                    )
 
-            # -- Check Protocol Flag --
-            if protocol == 'http':
-                proxies.extend(self.http())
-            elif protocol == 'https':
-                proxies.extend(self.https())
+            proxies.extend(filtred)
+
+
+        # --- FILTER ANONYMITY ---
+        if anonymity and isinstance(anonymity, list) and anonymity[0] > 0:
+
+            filtred = Froxy._filter_n_proxies(
+                        n=anonymity[0], 
+                        flags=anonymity[1:], 
+                        func_filter=self.anonymity
+                    )
+
+            proxies.extend(filtred)
+
+
+        # --- FILTER PROTOCOL (HTTP AND HTTPS) ---
+        if protocol and isinstance(protocol, list) and protocol[0] > 0:
+
+            if protocol[1].lower() == 'http':
+                
+                filtred = Froxy._filter_n_proxies(
+                        n=protocol[0], 
+                        flags=['http'], 
+                        func_filter=self.http
+                    )
+
+                proxies.extend(filtred)
+
+            elif protocol[1].lower() == 'https':
+
+                filtred = Froxy._filter_n_proxies(
+                        n=protocol[0], 
+                        flags=['https'], 
+                        func_filter=self.https
+                    )
+
+                proxies.extend(filtred)
         
-        if google_passed and isinstance(google_passed, str):
-            proxies.extend(self.google(flag=google_passed))
 
+        # --- FILTER GOOGLE PASSED ---
+        if google_passed and isinstance(google_passed, list) and google_passed[0] > 0:
+
+            filtred = Froxy._filter_n_proxies(
+                        n=google_passed[0], 
+                        flags=google_passed[1:], 
+                        func_filter=self.google
+                    )
+
+            proxies.extend(filtred)
+
+        # Returns all filtered proxies 
         return proxies

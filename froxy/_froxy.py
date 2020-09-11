@@ -61,7 +61,12 @@ class Froxy(object):
 
             return self._data_filter(resp.text)
 
-        except (requests.ConnectionError, requests.ConnectTimeout, requests.HTTPError, requests.ReadTimeout) as err:
+        except (
+            requests.ConnectionError,
+            requests.ConnectTimeout,
+            requests.HTTPError,
+            requests.ReadTimeou
+        ) as err:
             sys.exit(err)
             
     def _data_filter(self, data: str) -> list:

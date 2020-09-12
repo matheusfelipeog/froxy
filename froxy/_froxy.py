@@ -65,7 +65,7 @@ class Froxy(object):
             requests.ConnectionError,
             requests.ConnectTimeout,
             requests.HTTPError,
-            requests.ReadTimeou
+            requests.ReadTimeout
         ) as err:
             sys.exit(err)
             

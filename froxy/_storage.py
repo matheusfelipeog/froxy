@@ -19,7 +19,7 @@ class Storage(object):
         return f'The storage contains {self.length} data saved temporarily.'
 
     def __repr__(self):
-        return f'class Storage(storage_type={type(self._storage)}, length=<{self.length}>)'
+        return f'Storage(storage_type={type(self._storage)}, length=<{self.length}>)'
 
     def insert(self, data: list) -> None:
         """Store data copy in memory temporarily.

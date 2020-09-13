@@ -47,3 +47,9 @@ class Storage(object):
 
         for data in deepcopy(self._storage):
             yield data
+
+    def clear(self) -> None:
+        """Force clear temporary storage."""
+
+        self._storage.clear()
+    

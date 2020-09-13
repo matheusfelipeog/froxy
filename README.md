@@ -29,6 +29,90 @@ Froxy uses the API available at **[Proxy List](https://github.com/clarketm/proxy
 Thank you for maintaining and making this API available [@clarketm](https://github.com/clarketm) ❤
 
 
+## Demo
+
+This is a demo use to get proxies with a filter:
+
+```python
+import requests
+
+from froxy import Froxy
+
+froxy = Froxy()
+
+for proxy in froxy.https(): # Get proxies with protocol https
+    print(proxy)
+
+# Output
+['125.17.80.226', '8080', ['IN', 'H', 'S', '+']]  
+['31.204.180.44', '53281', ['RU', 'H', 'S', '-']] 
+['213.108.173.247', '8080', ['RU', 'N', 'S', '-']]
+['109.169.151.131', '8080', ['RU', 'N', 'S', '+']]
+['149.129.240.8', '8080', ['SG', 'N', 'S', '-']],
+[...]
+```
+
+This a demo use with requests module:
+
+```python
+import requests
+
+from froxy import Froxy
+
+froxy = Froxy()
+ip, port, *_ = froxy.http()[0] # Get first proxy (IP and PORT)
+
+proxies = {
+    "http": f'{ip}:{port}',
+    "https": f'{ip}:{port}'
+}
+
+r = requests.get('https://httpbin.org/ip', proxies=proxies)
+print(f'Response: {r.json()}')
+
+# Output
+Response: {'origin': '103.250.69.233'}
+```
+
+ ### ⚠ Warning ⚠
+ 
+ **Not all proxies work, so try to use only those that work use `try...except` as a "filter"**
+ 
+ Basic example:
+ ```python
+import requests
+
+from froxy import Froxy
+
+froxy = Froxy()
+
+for proxy in froxy.http():
+    ip, port, *_ = proxy
+    
+    proxies = {
+        "http": f'{ip}:{port}',
+        "https": f'{ip}:{port}'
+    }
+    
+    try:
+        r = requests.get('https://httpbin.org/ip', proxies=proxies)
+        print(f'Response: {r.json()}')
+        
+    except Exception:
+        print('Fail, next...')
+        continue
+        
+# output
+Response: {'origin': '103.250.69.233'}
+Fail, next...
+Fail, next...
+Fail, next...
+Fail, next...
+Response: {'origin': '212.32.213.170'}
+...
+```
+
+
 ## License
 
 This project is using the MIT license, see in [MIT LICENSE](./LICENSE).

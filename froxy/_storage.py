@@ -52,4 +52,3 @@ class Storage(object):
         """Force clear temporary storage."""
 
         self._storage.clear()
-    

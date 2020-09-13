@@ -21,7 +21,6 @@ Froxy uses the API available at **[Proxy List](https://github.com/clarketm/proxy
 
 - It free.
 - No query limit.
-- It provides proxies that work well.
 - It has a variety of types of proxies.
 - It has an interesting amount of proxies.
 - It is updated daily.

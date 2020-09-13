@@ -5,7 +5,7 @@ from copy import deepcopy
 
 
 class Storage(object):
-    """Class for storage and data manipulation."""
+    """Class for storage and data manipulation of Froxy class."""
 
     def __init__(self):
         

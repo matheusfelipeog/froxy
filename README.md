@@ -33,8 +33,6 @@ Thank you for maintaining and making this API available [@clarketm](https://gith
 This is a demo use to get proxies with a filter:
 
 ```python
-import requests
-
 from froxy import Froxy
 
 froxy = Froxy()

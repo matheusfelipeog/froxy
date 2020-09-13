@@ -24,6 +24,8 @@ import random
 import requests
 
 # --- Local libraries ---
+from ._storage import Storage
+
 from ._const import API_URL
 
 from ._const import PROXIES_DATA_REGEX
@@ -42,7 +44,7 @@ class Froxy(object):
     
     def __init__(self):
 
-        self._proxy_storage: list = []
+        self.storage: list = Storage()
 
         # Start for get data in API and set in storage
         self._set_proxies_in_storage()
@@ -120,7 +122,9 @@ class Froxy(object):
 
         data_raw = self._get_data_in_api(API_URL)
 
-        self._proxy_storage = self._data_normalization(data_raw)
+        self.storage.insert(
+            self._data_normalization(data_raw)
+        )
 
     def _base_proxies_filter(self, category: str, filters: list) -> list:
         """Filter proxies by category and flags.
@@ -136,22 +140,22 @@ class Froxy(object):
         
         if category == 'country':
             data_filtered.extend(
-                Froxy._filter_model(self._proxy_storage, line=2, col=0, filters=filters)
+                Froxy._filter_model(self.storage.get(), line=2, col=0, filters=filters)
             )
         
         elif category == 'anonymity':
             data_filtered.extend(
-                Froxy._filter_model(self._proxy_storage, line=2, col=1, filters=filters)
+                Froxy._filter_model(self.storage.get(), line=2, col=1, filters=filters)
             )
 
         elif category == 'protocol':
             data_filtered.extend(
-                Froxy._filter_model(self._proxy_storage, line=2, col=2, filters=filters)
+                Froxy._filter_model(self.storage.get(), line=2, col=2, filters=filters)
             )
         
         elif category == 'google_passed':
             data_filtered.extend(
-                Froxy._filter_model(self._proxy_storage, line=2, col=3, filters=filters)
+                Froxy._filter_model(self.storage.get(), line=2, col=3, filters=filters)
             )
 
         return data_filtered
@@ -406,7 +410,7 @@ class Froxy(object):
 
         # if don't have a filter flag, return all proxies.
         if not any([country, anonymity, protocol, google_passed]):
-            return self._proxy_storage
+            return self.storage.get()
 
         proxies = []  # Storage of filtered proxies
 

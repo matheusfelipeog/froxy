@@ -43,6 +43,12 @@ class Froxy(object):
     """
     
     def __init__(self):
+        """Initialize storage attributes and start method to save to storage.
+        
+        Public Attribute:
+
+        `storage: list` - Data storage and manipulation object
+        """
 
         self.storage: list = Storage()
 

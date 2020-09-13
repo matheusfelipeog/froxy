@@ -34,3 +34,10 @@ class Storage(object):
         )
 
         self.length += len(data)
+    
+    def get(self) -> list:
+        """Get a copy of all data in the temporary memory."""
+
+        return deepcopy(
+            self._storage
+        )

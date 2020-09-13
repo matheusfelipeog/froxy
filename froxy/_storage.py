@@ -41,3 +41,9 @@ class Storage(object):
         return deepcopy(
             self._storage
         )
+
+    def generator(self):
+        """Get a copy of the data in temporary memory in generator format."""
+
+        for data in deepcopy(self._storage):
+            yield data

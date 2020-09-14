@@ -8,6 +8,16 @@
 </h1>
 
 
+## Index
+
+- [The goal](#the-goal)
+- [How it works?](#how-it-works)
+   - [Why are you using this API?](#why-are-you-using-this-api)
+- [Demo](#demo)
+   - [Warning](#-warning-)
+- [License](#license)
+
+
 ## The goal
 
 This project aims to provide an interface for filter and using free proxies in your web scraping and web crawler projects with Python and [requests module](https://github.com/psf/requests).

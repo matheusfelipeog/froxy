@@ -15,6 +15,7 @@
    - [Why are you using this API?](#why-are-you-using-this-api)
 - [Demo](#demo)
    - [Warning](#-warning-)
+- [Documentation](#doc)
 - [License](#license)
 
 
@@ -117,6 +118,182 @@ Fail, next...
 Fail, next...
 Response: {'origin': '212.32.213.170'}
 ...
+```
+
+
+# Doc
+
+This is return of Froxy class using `help(Froxy)`:
+```bash
+class Froxy(builtins.object)
+ |  A class for manipulating and filtering proxies.
+ |
+ |  Location of API used: https://github.com/clarketm/proxy-list
+ |
+ |  Methods defined here:
+ |
+ |  __init__(self)
+ |      Initialize storage attributes and start method to save to storage.
+ |
+ |      Public Attribute:
+ |
+ |      `storage: list` - Data storage and manipulation object
+ |
+ |  anonymity(self, *flags: tuple) -> list
+ |      Filter proxies by anonymity level.
+ |
+ |      Keyword arguments:
+ |
+ |      `flags: tuple` - Filter flags of selected anonymity level.
+ |
+ |      Anonymity levels:
+ |          - Flags:
+ |              - N = No anonymity
+ |              - A = Anonymity
+ |              - H = High anonymity
+ |
+ |      Usage:
+ |      ```
+ |      >>> from froxy import Froxy
+ |      >>> froxy = Froxy()
+ |      >>> froxy.anonymity('A', 'H')
+ |      # Example output
+ |      [
+ |          ['255.255.255.255', '3000', ['RS', 'H', 'S!', '-'],
+ |          ['254.254.254.254', '8058', ['US', 'A', 'S!', '+'],
+ |          ...
+ |      ]
+ |      ```
+ |
+ |  country(self, *flags: tuple) -> list
+ |      Filter proxies for country.
+ |
+ |      Use the country code to filter proxies.
+ |
+ |      Keyword arguments:
+ |
+ |      `flags: tuple` - Filter flags of selected countries.
+ |
+ |      Code example:
+ |          BR = Brazil
+ |          US = United States of America
+ |          EG = Egypt
+ |          (...)
+ |
+ |      See all codes at: [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)
+ |
+ |      Usage:
+ |      ```
+ |      >>> from froxy import Froxy
+ |      >>> froxy = Froxy()
+ |      >>> froxy.country('RS', 'US')
+ |      # Example output
+ |      [
+ |          ['255.255.255.255', '3000', ['RS', 'N', 'S!', '-'],
+ |          ['254.254.254.254', '8058', ['US', 'N', 'S!', '+'],
+ |          ...
+ |      ]
+ |      ```
+ |
+ |  get(self, country: list = [], anonymity: list = [], protocol: list = [], google_passed: list = []) -> list
+ |      Use multiple proxy filters or get all proxies if the filter arguments are empty.
+ |
+ |      Keyword arguments:
+ |
+ |      `country: list` - Number and List of flags of selected countries.
+ |          - More info at: https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2
+ |
+ |      `anonymity: list` - Number and List of flags of selected anonymity level. (N, A or H).
+ |
+ |      `protocol: list` - Number and Selected protocol (http or https).
+ |
+ |      `google_passed: list` - Number and Filter flags of google passed. (- or +).
+ |
+ |      Usage:
+ |      ```
+ |      >>> from froxy import Froxy
+ |      >>> froxy = Froxy()
+ |      >>> froxy.get(
+ |              country=[1, 'US', 'BR'],
+ |              anonymity=[2, 'H'],
+ |              protocol=[2, 'https'],
+ |              google_passed=[1, '+']
+ |          )
+ |      # Example output
+ |      [
+ |          ['255.255.255.255', '3000', ['US', 'H', 'S!', '+'],
+ |          ['254.254.254.254', '8058', ['BR', 'A', 'S', '+'],
+ |          ['254.254.254.253', '6000', ['TT', 'H', '', '-'],
+ |          ['254.254.254.252', '4058', ['BR', 'H', '!', '-'],
+ |          ['255.255.255.251', '3000', ['RS', 'H', 'S', '-'],
+ |          ['254.254.254.250', '7058', ['ZZ', 'H', 'S!', '-'],
+ |          ['254.254.254.250', '7058', ['YY', 'N', '', '+']
+ |      ]
+ |      ```
+ |
+ |  google(self, flag: str, *args, **kwargs) -> list
+ |      Filter proxies by google passed.
+ |
+ |      Keyword arguments:
+ |
+ |      `flags: tuple` - Filter flags of google passed.
+ |          - (+) = Yes
+ |          - (-) = No
+ |
+ |      A Google proxy (also known as the google-passed proxy)
+ |      is an HTTP proxy which has the following two features:
+ |          - 1. It must support searching on Google and a Google
+ |               proxy should support HTTPS/SSL;
+ |          - 2. Google must not block it.
+ |
+ |          More info at: https://free-proxy-list.net/blog/google-proxies-dead
+ |
+ |      Usage:
+ |      ```
+ |      >>> from froxy import Froxy
+ |      >>> froxy = Froxy()
+ |      >>> froxy.google('+')                                                                                                                                                                                                        
+ |      # Example output
+ |      [
+ |          ['255.255.255.255', '3000', ['AA', 'H', 'S!', '+'], 
+ |          ['254.254.254.254', '8058', ['YY', 'N', '', '+'],
+ |          ...
+ |      ]
+ |      ```
+ |  
+ |  http(self, *args, **kwargs) -> list
+ |      Filter proxies by http protocol.
+ |      
+ |      Usage:
+ |      ```
+ |      >>> from froxy import Froxy
+ |      >>> froxy = Froxy()
+ |      >>> froxy.http()
+ |      # Example output
+ |      [
+ |          ['255.255.255.255', '3000', ['AA', 'H', '!', '-'], 
+ |          ['254.254.254.254', '8058', ['ZZ', 'A', '', '+'],
+ |          ...
+ |      ]
+ |      ```
+ |  
+ |  https(self, *args, **kwargs) -> list
+ |      Filter proxies by https protocol.
+ |      
+ |      Usage:
+ |      ```
+ |      >>> from froxy import Froxy
+ |      >>> froxy = Froxy()
+ |      >>> froxy.https()
+ |      # Example output
+ |      [
+ |          ['255.255.255.255', '3000', ['AA', 'H', 'S!', '-'], 
+ |          ['254.254.254.254', '8058', ['ZZ', 'A', 'S', '+'],
+ |          ...
+ |      ]
+ |      ```
+ |  
+ |  ----------------------------------------------------------------------
 ```
 
 

@@ -55,7 +55,8 @@ class Froxy(object):
         # Start for get data in API and set in storage
         self._set_proxies_in_storage()
 
-    def _get_data_in_api(self, url: str) -> list:
+    @staticmethod
+    def _get_data_in_api(url: str) -> list:
         """Makes the api request and returns a list of filtered proxies.
 
         Keyword arguments:
@@ -67,7 +68,7 @@ class Froxy(object):
             resp = requests.request('GET', url, timeout=10)
             resp.raise_for_status
 
-            return self._data_filter(resp.text)
+            return Froxy._data_filter(resp.text)
 
         except (
             requests.ConnectionError,
@@ -76,8 +77,9 @@ class Froxy(object):
             requests.ReadTimeout
         ) as err:
             sys.exit(err)
-            
-    def _data_filter(self, data: str) -> list:
+    
+    @staticmethod
+    def _data_filter(data: str) -> list:
         """Filter data using regex and return the data list.
 
         Keyword arguments:
@@ -87,7 +89,8 @@ class Froxy(object):
 
         return PROXIES_DATA_REGEX.findall(str(data))
 
-    def _data_normalization(self, data: list) -> list:
+    @staticmethod
+    def _data_normalization(data: list) -> list:
         """Normalize proxy information to remove spaces and split information.
 
         Keyword arguments:
@@ -126,10 +129,10 @@ class Froxy(object):
     def _set_proxies_in_storage(self) -> None:
         """Save data in proxy storage."""
 
-        data_raw = self._get_data_in_api(API_URL)
+        data_raw = Froxy._get_data_in_api(API_URL)
 
         self.storage.insert(
-            self._data_normalization(data_raw)
+            Froxy._data_normalization(data_raw)
         )
 
     def _base_proxies_filter(self, category: str, filters: list) -> list:

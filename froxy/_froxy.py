@@ -39,6 +39,24 @@ from ._const import GOOGLE_PASSED_FLAGS
 class Froxy(object):
     """A class for manipulating and filtering proxies.
     
+    All public method returns are made up of a list of lists in the following structure:
+    
+    [
+        [ip_adress, port, [country_code, anonymity, http_or_https, google_passed]],
+        ...
+    ]
+
+    Example:
+
+    [
+        ['189.6.191.184', '8080', ['BR', 'N', 'S', '+']],
+        ...
+    ]
+
+    ___________________________________________________________________
+
+    Location of Froxy project: https://github.com/matheusfelipeog/froxy
+
     Location of API used: https://github.com/clarketm/proxy-list
     """
     

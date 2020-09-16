@@ -31,7 +31,7 @@ from ._const import API_URL
 from ._const import PROXIES_DATA_REGEX
 
 from ._const import HTTP_FLAGS, HTTPS_FLAGS
-from ._const import COUNTRY_CODE_FLAGS
+from ._const import COUNTRY_CODE_FLAGS_REGEX
 from ._const import ANONYMITY_FLAGS
 from ._const import GOOGLE_PASSED_FLAGS
 
@@ -209,6 +209,19 @@ class Froxy(object):
             )
         
         return proxies
+    
+    @staticmethod
+    def _is_valid_country(flag: str) -> bool:
+        """Check if country argument is valid.
+        
+        Keyword arguments:
+
+        `flag: str` - A code country in ISO 3166-1 alpha-2 format.
+        """
+
+        return bool(
+            COUNTRY_CODE_FLAGS_REGEX.findall(flag)
+        )
 
     def country(self, *flags: tuple) -> list:
         """Filter proxies for country.
@@ -241,13 +254,12 @@ class Froxy(object):
         ```
         """
 
-        # Normalize to uppercase
-        flags = [f.upper() for f in flags]
-
-        # Delete invalid flags
-        for idx, flag in enumerate(flags):
-            if flag not in COUNTRY_CODE_FLAGS:
-                del flags[idx]
+        # If the countries are valid, return those countries 
+        # in capital letters. if not, ignore
+        flags = [
+            flag.upper() for flag in flags 
+            if Froxy._is_valid_country(flag)
+        ]
 
         # If there are no flags, returns an empty list to not perform a linear search
         if not flags:

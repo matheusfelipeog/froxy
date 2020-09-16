@@ -20,7 +20,7 @@ Constants:
 
     ------------------ FLAGS ------------------
 
-    COUNTRY_CODE_FLAGS: list -  Country Code - ISO 3166-1 alpha-2;
+    COUNTRY_CODE_FLAGS_REGEX: re.Pattern -  Country Code - ISO 3166-1 alpha-2;
         └─ More info in: https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2
 
     ANONYMITY_FLAGS: list - Proxy Anonymity is splitting in three flags (N, A, H);
@@ -51,7 +51,6 @@ For more info about Flags, see: https://github.com/clarketm/proxy-list
 """
 
 import re
-from string import ascii_uppercase
 
 API_URL: str = "https://raw.githubusercontent.com/clarketm/proxy-list/master/proxy-list.txt"
 
@@ -67,7 +66,7 @@ PROXIES_DATA_REGEX: re.Pattern = re.compile(r'''
 ''', re.VERBOSE)
 
 # Country Code - ISO 3166-1 alpha-2 <https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2>
-COUNTRY_CODE_FLAGS: list = [f'{a}{a2}' for a in ascii_uppercase for a2 in ascii_uppercase]
+COUNTRY_CODE_FLAGS_REGEX: re.Pattern = re.compile(r'^([A-Z]{2})')
 
 ANONYMITY_FLAGS: list = ['N', 'A', 'H']
 

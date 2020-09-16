@@ -128,6 +128,24 @@ This is return of Froxy class using `help(Froxy)`:
 class Froxy(builtins.object)
  |  A class for manipulating and filtering proxies.
  |
+ |  All public method returns are made up of a list of lists in the following structure:
+ |
+ |  [
+ |      [ip_adress, port, [country_code, anonymity, http_or_https, google_passed]],
+ |      ...
+ |  ]
+ |
+ |  Example:
+ |
+ |  [
+ |      ['189.6.191.184', '8080', ['BR', 'N', 'S', '+']],
+ |      ...
+ |  ]
+ |
+ |  ___________________________________________________________________
+ |
+ |  Location of Froxy project: https://github.com/matheusfelipeog/froxy
+ |
  |  Location of API used: https://github.com/clarketm/proxy-list
  |
  |  Methods defined here:
@@ -141,7 +159,7 @@ class Froxy(builtins.object)
  |
  |  anonymity(self, *flags: tuple) -> list
  |      Filter proxies by anonymity level.
- |
+ |      
  |      Keyword arguments:
  |
  |      `flags: tuple` - Filter flags of selected anonymity level.
@@ -169,7 +187,7 @@ class Froxy(builtins.object)
  |      Filter proxies for country.
  |
  |      Use the country code to filter proxies.
- |
+ |      
  |      Keyword arguments:
  |
  |      `flags: tuple` - Filter flags of selected countries.
@@ -202,7 +220,7 @@ class Froxy(builtins.object)
  |
  |      `country: list` - Number and List of flags of selected countries.
  |          - More info at: https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2
- |
+ |      
  |      `anonymity: list` - Number and List of flags of selected anonymity level. (N, A or H).
  |
  |      `protocol: list` - Number and Selected protocol (http or https).
@@ -252,18 +270,18 @@ class Froxy(builtins.object)
  |      ```
  |      >>> from froxy import Froxy
  |      >>> froxy = Froxy()
- |      >>> froxy.google('+')                                                                                                                                                                                                        
+ |      >>> froxy.google('+')
  |      # Example output
  |      [
- |          ['255.255.255.255', '3000', ['AA', 'H', 'S!', '+'], 
+ |          ['255.255.255.255', '3000', ['AA', 'H', 'S!', '+'],
  |          ['254.254.254.254', '8058', ['YY', 'N', '', '+'],
  |          ...
  |      ]
  |      ```
- |  
+ |
  |  http(self, *args, **kwargs) -> list
  |      Filter proxies by http protocol.
- |      
+ |
  |      Usage:
  |      ```
  |      >>> from froxy import Froxy
@@ -271,15 +289,15 @@ class Froxy(builtins.object)
  |      >>> froxy.http()
  |      # Example output
  |      [
- |          ['255.255.255.255', '3000', ['AA', 'H', '!', '-'], 
+ |          ['255.255.255.255', '3000', ['AA', 'H', '!', '-'],
  |          ['254.254.254.254', '8058', ['ZZ', 'A', '', '+'],
  |          ...
  |      ]
  |      ```
- |  
+ |
  |  https(self, *args, **kwargs) -> list
  |      Filter proxies by https protocol.
- |      
+ |
  |      Usage:
  |      ```
  |      >>> from froxy import Froxy
@@ -287,12 +305,12 @@ class Froxy(builtins.object)
  |      >>> froxy.https()
  |      # Example output
  |      [
- |          ['255.255.255.255', '3000', ['AA', 'H', 'S!', '-'], 
+ |          ['255.255.255.255', '3000', ['AA', 'H', 'S!', '-'],
  |          ['254.254.254.254', '8058', ['ZZ', 'A', 'S', '+'],
  |          ...
  |      ]
  |      ```
- |  
+ |
  |  ----------------------------------------------------------------------
 ```
 

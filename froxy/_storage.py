@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+"""Module for storage and data manipulation of Froxy class."""
 
 # --- Standard libraries ----
 from copy import deepcopy

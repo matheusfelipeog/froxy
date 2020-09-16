@@ -31,7 +31,7 @@ from ._const import API_URL
 from ._const import PROXIES_DATA_REGEX
 
 from ._const import HTTP_FLAGS, HTTPS_FLAGS
-from ._const import COUNTRY_CODE_FLAGS
+from ._const import COUNTRY_CODE_FLAGS_REGEX
 from ._const import ANONYMITY_FLAGS
 from ._const import GOOGLE_PASSED_FLAGS
 
@@ -39,6 +39,24 @@ from ._const import GOOGLE_PASSED_FLAGS
 class Froxy(object):
     """A class for manipulating and filtering proxies.
     
+    All public method returns are made up of a list of lists in the following structure:
+    
+    [
+        [ip_adress, port, [country_code, anonymity, http_or_https, google_passed]],
+        ...
+    ]
+
+    Example:
+
+    [
+        ['189.6.191.184', '8080', ['BR', 'N', 'S', '+']],
+        ...
+    ]
+
+    ___________________________________________________________________
+
+    Location of Froxy project: https://github.com/matheusfelipeog/froxy
+
     Location of API used: https://github.com/clarketm/proxy-list
     """
     
@@ -55,7 +73,8 @@ class Froxy(object):
         # Start for get data in API and set in storage
         self._set_proxies_in_storage()
 
-    def _get_data_in_api(self, url: str) -> list:
+    @staticmethod
+    def _get_data_in_api(url: str) -> list:
         """Makes the api request and returns a list of filtered proxies.
 
         Keyword arguments:
@@ -67,7 +86,7 @@ class Froxy(object):
             resp = requests.request('GET', url, timeout=10)
             resp.raise_for_status
 
-            return self._data_filter(resp.text)
+            return Froxy._data_filter(resp.text)
 
         except (
             requests.ConnectionError,
@@ -76,8 +95,9 @@ class Froxy(object):
             requests.ReadTimeout
         ) as err:
             sys.exit(err)
-            
-    def _data_filter(self, data: str) -> list:
+    
+    @staticmethod
+    def _data_filter(data: str) -> list:
         """Filter data using regex and return the data list.
 
         Keyword arguments:
@@ -87,7 +107,8 @@ class Froxy(object):
 
         return PROXIES_DATA_REGEX.findall(str(data))
 
-    def _data_normalization(self, data: list) -> list:
+    @staticmethod
+    def _data_normalization(data: list) -> list:
         """Normalize proxy information to remove spaces and split information.
 
         Keyword arguments:
@@ -126,10 +147,10 @@ class Froxy(object):
     def _set_proxies_in_storage(self) -> None:
         """Save data in proxy storage."""
 
-        data_raw = self._get_data_in_api(API_URL)
+        data_raw = Froxy._get_data_in_api(API_URL)
 
         self.storage.insert(
-            self._data_normalization(data_raw)
+            Froxy._data_normalization(data_raw)
         )
 
     def _base_proxies_filter(self, category: str, filters: list) -> list:
@@ -209,6 +230,19 @@ class Froxy(object):
             )
         
         return proxies
+    
+    @staticmethod
+    def _is_valid_country(flag: str) -> bool:
+        """Check if country argument is valid.
+        
+        Keyword arguments:
+
+        `flag: str` - A code country in ISO 3166-1 alpha-2 format.
+        """
+
+        return bool(
+            COUNTRY_CODE_FLAGS_REGEX.findall(flag)
+        )
 
     def country(self, *flags: tuple) -> list:
         """Filter proxies for country.
@@ -241,13 +275,12 @@ class Froxy(object):
         ```
         """
 
-        # Normalize to uppercase
-        flags = [f.upper() for f in flags]
-
-        # Delete invalid flags
-        for idx, flag in enumerate(flags):
-            if flag not in COUNTRY_CODE_FLAGS:
-                del flags[idx]
+        # If the countries are valid, return those countries 
+        # in capital letters. if not, ignore
+        flags = [
+            flag.upper() for flag in flags 
+            if Froxy._is_valid_country(flag)
+        ]
 
         # If there are no flags, returns an empty list to not perform a linear search
         if not flags:

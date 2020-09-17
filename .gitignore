@@ -4,3 +4,6 @@ venv/
 
 # Ignore cache of module importing
 __pycache__/
+
+# Ignore credentials file
+.pypirc

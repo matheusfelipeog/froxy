@@ -17,6 +17,7 @@
 - [Demo](#demo)
    - [Warning](#-warning-)
 - [Documentation](#doc)
+- [Contributions](#contributions)
 - [License](#license)
 
 
@@ -325,6 +326,17 @@ class Froxy(builtins.object)
  |
  |  ----------------------------------------------------------------------
 ```
+
+
+## Contributions
+
+All contributions are welcome!
+
+Found a problem, want to give a tip? open an [issue](https://github.com/matheusfelipeog/froxy/issues).
+
+Do you have a solution to the problem? Send me a PR.
+
+Did you like this project? Click on the little star 😄
 
 
 ## License

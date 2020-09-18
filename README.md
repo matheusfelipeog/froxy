@@ -3,7 +3,7 @@
 </p>
 
 <h1 align="center">
-    <img src="./assets/froxy.png" alt="Froxy logo" width="500px" /><br />
+    <img src="https://github.com/matheusfelipeog/froxy/blob/master/assets/froxy.png" alt="Froxy logo" width="500px" /><br />
     Hide your IP with free proxies
 </h1>
 

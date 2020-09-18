@@ -13,6 +13,7 @@
 - [The goal](#the-goal)
 - [How it works?](#how-it-works)
    - [Why are you using this API?](#why-are-you-using-this-api)
+- [Install](#install)
 - [Demo](#demo)
    - [Warning](#-warning-)
 - [Documentation](#doc)
@@ -37,6 +38,17 @@ Froxy uses the API available at **[Proxy List](https://github.com/clarketm/proxy
 - It is updated daily.
 
 Thank you for maintaining and making this API available [@clarketm](https://github.com/clarketm) ❤
+
+
+## Install
+
+install using pip:
+
+```bash
+$ pip install froxy
+```
+
+then, see the **[demo](#demo)** or **[documentation](#doc)** for more information.
 
 
 ## Demo

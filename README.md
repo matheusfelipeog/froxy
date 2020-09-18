@@ -2,10 +2,10 @@
     <img src="https://img.shields.io/github/license/matheusfelipeog/froxy?color=black&style=for-the-badge" alt="License" />
 </p>
 
-<h1 align="center">
-    <img src="https://github.com/matheusfelipeog/froxy/blob/master/assets/froxy.png" alt="Froxy logo" width="500px" /><br />
+<p align="center">
+    <img src="https://raw.githubusercontent.com/matheusfelipeog/froxy/master/assets/froxy.png" alt="Froxy logo" width="500px" /><br />
     Hide your IP with free proxies
-</h1>
+</p>
 
 
 ## Index

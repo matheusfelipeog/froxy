@@ -28,7 +28,7 @@ This project aims to provide an interface for filter and using free proxies in y
 
 ## How it works?
 
-Froxy uses the API available at **[Proxy List](https://github.com/clarketm/proxy-list)** and runs a filter to obtain only proxies and their information. Then it provides an interface to filter and use the filtered proxies.
+Froxy uses the API available at [Proxy List](https://github.com/clarketm/proxy-list) and runs a filter to obtain only proxies and their information. Then it provides an interface to filter and use the filtered proxies.
 
 ### Why are you using this API?
 
@@ -49,7 +49,7 @@ install using pip:
 $ pip install froxy
 ```
 
-then, see the **[demo](#demo)** or **[documentation](#doc)** for more information.
+then, see the [demo](#demo) or [documentation](#doc) for more information.
 
 
 ## Demo

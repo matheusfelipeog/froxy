@@ -2,18 +2,22 @@
 
 from setuptools import setup, find_packages
 
+from froxy.__about__ import __version__
+from froxy.__about__ import __author__
+from froxy.__about__ import __email__
+
 with open('README.md', mode='r', encoding='utf-8') as f:
     long_description = f.read()
 
 setup(
     name='froxy',
-    version='1.0.1',
+    version=__version__,
     description='Hide your IP with free proxies using Froxy',
     long_description=long_description,
     long_description_content_type='text/markdown',
     license='MIT License',
-    author='Matheus Felipe',
-    author_email='matheusfelipeog@gmail.com',
+    author=__author__,
+    author_email=__email__,
     url='https://github.com/matheusfelipeog/froxy',
     packages=find_packages(),
     install_requires=['requests'],

@@ -50,6 +50,14 @@ Constants:
 For more info about Flags, see: https://github.com/clarketm/proxy-list
 """
 
+from .__about__ import __version__
+from .__about__ import __author__
+from .__about__ import __email__
+from .__about__ import __github__
+
+__version__ = __version__
+__author__ = f'{__author__} <{__email__}> and <{__github__}>'
+
 import re
 
 API_URL: str = "https://raw.githubusercontent.com/clarketm/proxy-list/master/proxy-list.txt"

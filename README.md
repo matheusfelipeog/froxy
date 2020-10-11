@@ -1,5 +1,16 @@
 <p align="center">
-    <img src="https://img.shields.io/github/license/matheusfelipeog/froxy?color=black&style=for-the-badge" alt="License" />
+    <a href="https://pypi.org/project/froxy/">
+        <img alt="PyPI - Status" src="https://img.shields.io/pypi/status/froxy?style=for-the-badge&color=black" />
+    </a>
+    <a href="https://pypi.org/project/froxy/">
+        <img alt="PyPI" src="https://img.shields.io/pypi/v/froxy?style=for-the-badge&color=black" />
+    </a>
+    <a href="https://github.com/matheusfelipeog/froxy/releases">
+        <img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/matheusfelipeog/froxy?style=for-the-badge&color=black" />
+    </a>
+    <a href="https://github.com/matheusfelipeog/froxy/blob/master/LICENSE">
+        <img src="https://img.shields.io/github/license/matheusfelipeog/froxy?color=black&style=for-the-badge" alt="License MIT" />
+    </a>
 </p>
 
 <p align="center">

@@ -287,7 +287,7 @@ class Froxy(object):
         # in capital letters. if not, ignore
         flags = [
             flag.upper() for flag in flags 
-            if Froxy._is_valid_country(flag)
+            if Froxy._is_valid_country(flag.upper())
         ]
 
         # If there are no flags, returns an empty list to not perform a linear search

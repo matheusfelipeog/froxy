@@ -92,7 +92,7 @@ import requests
 from froxy import Froxy
 
 froxy = Froxy()
-ip, port, *_ = froxy.http()[0] # Get first proxy (IP and PORT)
+ip, port = froxy.http()[0][:2] # Get first proxy (IP and PORT)
 
 proxies = {
     "http": f'{ip}:{port}',
@@ -119,7 +119,7 @@ from froxy import Froxy
 froxy = Froxy()
 
 for proxy in froxy.http():
-    ip, port, *_ = proxy
+    ip, port = proxy[:2]
     
     proxies = {
         "http": f'{ip}:{port}',
